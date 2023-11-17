@@ -5,7 +5,7 @@ namespace Treker.Backend.Types
     public class Project
     {
         public Models.Project project { get; set; }
-        public Task Add()
+        public Task<int> Add()
         {
             return Task.Run(async () =>
             {
@@ -13,16 +13,19 @@ namespace Treker.Backend.Types
                 {
                     try
                     {
-                        await db.Projects.AddAsync(this.project);
+                        var add_obj = await db.Projects.AddAsync(this.project);
                         await db.SaveChangesAsync();
+
+                        return add_obj.Entity.Id;
                     }
                     catch (Exception ex)
                     {
                         throw new Exception($"Error while adding new project\n{ex.Message}");
+                     
                     }
 
                 }
-
+               
             });
         }
 

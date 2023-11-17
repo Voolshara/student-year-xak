@@ -6,7 +6,7 @@ namespace Treker.Backend.Types
     {
         public Models.User user { get; set; }
 
-        public Task Add()
+        public Task<int> Add()
         {
             return Task.Run(async () =>
             {
@@ -14,8 +14,10 @@ namespace Treker.Backend.Types
                 {
                     try
                     {
-                        await db.Users.AddAsync(this.user);
+                        var add_obj = await db.Users.AddAsync(this.user);
                         await db.SaveChangesAsync();
+
+                        return add_obj.Entity.Id;
                     }
                     catch (Exception ex)
                     {

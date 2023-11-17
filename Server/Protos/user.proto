@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+option csharp_namespace = "Treker";
+
+package user_proto;
+
+service UserWorker{
+
+    rpc Registation (RegistationRequest) returns (RegistationResponse);
+
+}
+service UserGetter{
+
+}
+message RegistationRequest{
+    string link =1;
+
+}message RegistationResponse{
+    string state =1;
+    int32 code =2;
+    int32 user_id =3;
+}
