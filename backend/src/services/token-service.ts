@@ -44,10 +44,10 @@ class TokenService {
 
   validateAccessToken(token: string): userDto | undefined {
     try {
-      const { userId, login, role } = <jwt.UserDataJwtPayload>(
+      const { userId, link, isAdmin } = <jwt.UserDataJwtPayload>(
         jwt.verify(token, process.env.JWT_ACCESS_SECRET as string)
       );
-      return { userId, login, role };
+      return { userId, link, isAdmin };
     } catch (e) {
       return undefined;
     }
@@ -55,7 +55,7 @@ class TokenService {
 
   async validateRefreshToken(token: string): Promise<userDto | undefined> {
     try {
-      const { userId, login, role } = <jwt.UserDataJwtPayload>(
+      const { userId, link, isAdmin } = <jwt.UserDataJwtPayload>(
         jwt.verify(token, process.env.JWT_REFRESH_SECRET as string)
       );
       const tokenData = await prisma.tokens.findMany({
@@ -76,7 +76,7 @@ class TokenService {
         throw ApiError.UnathorizedError();
       }
 
-      return { userId, login, role };
+      return { userId, link, isAdmin };
     } catch (e) {
       return undefined;
     }

@@ -1,7 +1,7 @@
 export interface userDto {
   userId: number;
-  login: string;
-  role: string;
+  link: string;
+  isAdmin: boolean;
 }
 
 export interface userRigistration {
@@ -29,4 +29,10 @@ export interface succesAuthDto {
 
 export interface userData {
   userName: string;
+}
+
+export interface user {
+  id: number;
+  link: string;
+  isAdmin: boolean;
 }

@@ -34,9 +34,8 @@ model Reports {
 }
 
 model Thread {
-  id Int @id @default(autoincrement())
+  id            Int      @id @default(autoincrement())
   creation_date DateTime @default(now())
-
 
   solver   Users? @relation(fields: [solverId], references: [id], name: "executingThreds")
   solverId Int?
@@ -44,11 +43,15 @@ model Thread {
   creator   Users @relation(fields: [creatorId], references: [id])
   creatorId Int
 
-  title   String? @db.VarChar(255)
+  title   String @db.VarChar(255)
   comment String  @db.VarChar(255)
 
-  state Int      @default(1)
-  tag   String[] @db.VarChar(255)
+  state_done  Int @default(0)
+  state_error Int @default(0)
+  state_none  Int @default(0)
+  state_skip  Int @default(0)
+
+  tag String[] @db.VarChar(255)
 
   childThreads Thread[] @relation(name: "tree")
 
@@ -59,8 +62,9 @@ model Thread {
 }
 
 model Users {
-  id       Int        @id @default(autoincrement())
-  link     String     @db.VarChar(255)
+  id      Int     @id @default(autoincrement())
+  link    String  @db.VarChar(255)
+  isAdmin Boolean @default(false)
 
   createdThreds   Thread[]
   executingThreds Thread[] @relation(name: "executingThreds")

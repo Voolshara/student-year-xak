@@ -28,7 +28,6 @@ class UserService {
     }
 
     // const role = phone === "1" ? "admin" : "user";
-    const role = "user";
     const hashPassword = await bcrypt.hash(userRegistration.password, 3);
     const newUser = await prisma.users.create({
       data: {
@@ -51,7 +50,8 @@ class UserService {
 
     const userData = {
       userId: newUser.id,
-      login: newUser.UserAuthes[0].login,
+      link: newUser.UserAuthes[0].login,
+      isAdmin: newUser.isAdmin,
     } as userDto;
 
     const tokens = tokenService.generateTokens({ ...userData });
@@ -88,7 +88,8 @@ class UserService {
 
     const userData = {
       userId: authData.user.id,
-      login: authData.login,
+      link: authData.login,
+      isAdmin: authData.user.isAdmin,
     } as userDto;
 
     const tokens = tokenService.generateTokens({ ...userData });
@@ -129,7 +130,8 @@ class UserService {
 
     const userDto = {
       userId: user.id,
-      login: user.UserAuthes[0].login,
+      link: user.UserAuthes[0].login,
+      isAdmin: user.isAdmin,
     } as userDto;
     const tokens = tokenService.generateTokens({ ...userDto });
 
