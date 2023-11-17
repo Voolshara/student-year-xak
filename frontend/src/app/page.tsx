@@ -16,7 +16,7 @@ function Home() {
   const [nowProject, setNowProject] = useState<Project>(proejcts[0]);
 
   return (
-    <main className="flex w-screen min-h-screen flex-col items-center justify-start">
+    <main className="flex w-full min-h-screen flex-col items-center justify-start mb-20">
       <NavBar />
 
       <div className="w-5/6 h-full flex flex-col items-start justify-center gap-y-20 mt-10">
@@ -51,7 +51,7 @@ function Home() {
             </div>
           </div>
 
-          <div className="flex h-full flex-col items-center justify-center w-3/4 ">
+          <div className="flex h-full flex-col items-center justify-center w-full">
             <ProjectELement project={nowProject} />
           </div>
         </div>
