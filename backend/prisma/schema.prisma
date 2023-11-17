@@ -26,16 +26,6 @@ model UserAuth {
   createTime DateTime @default(now())
 }
 
-model Projects {
-  id            Int      @id @default(autoincrement())
-  title         String   @db.VarChar(255)
-  creation_date DateTime @default(now())
-  creator       Int
-
-  user   Users[]
-  Thread Thread[]
-}
-
 model Reports {
   id     Int    @id @default(autoincrement())
   thred  Thread @relation(fields: [tredId], references: [id])
@@ -45,6 +35,8 @@ model Reports {
 
 model Thread {
   id Int @id @default(autoincrement())
+  creation_date DateTime @default(now())
+
 
   solver   Users? @relation(fields: [solverId], references: [id], name: "executingThreds")
   solverId Int?
@@ -54,9 +46,6 @@ model Thread {
 
   title   String? @db.VarChar(255)
   comment String  @db.VarChar(255)
-
-  project   Projects @relation(fields: [projectId], references: [id])
-  projectId Int
 
   state Int      @default(1)
   tag   String[] @db.VarChar(255)
@@ -72,7 +61,6 @@ model Thread {
 model Users {
   id       Int        @id @default(autoincrement())
   link     String     @db.VarChar(255)
-  projects Projects[]
 
   createdThreds   Thread[]
   executingThreds Thread[] @relation(name: "executingThreds")
