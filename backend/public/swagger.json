@@ -187,58 +187,10 @@
 				"properties": {
 					"userName": {
 						"type": "string"
-					},
-					"role": {
-						"type": "string"
 					}
 				},
 				"required": [
-					"userName",
-					"role"
-				],
-				"type": "object",
-				"additionalProperties": false
-			},
-			"addDevice": {
-				"properties": {
-					"deviceName": {
-						"type": "string"
-					}
-				},
-				"required": [
-					"deviceName"
-				],
-				"type": "object",
-				"additionalProperties": false
-			},
-			"Device": {
-				"properties": {
-					"id": {
-						"type": "number",
-						"format": "double"
-					},
-					"name": {
-						"type": "string"
-					}
-				},
-				"required": [
-					"id",
-					"name"
-				],
-				"type": "object",
-				"additionalProperties": false
-			},
-			"getDevices": {
-				"properties": {
-					"items": {
-						"items": {
-							"$ref": "#/components/schemas/Device"
-						},
-						"type": "array"
-					}
-				},
-				"required": [
-					"items"
+					"userName"
 				],
 				"type": "object",
 				"additionalProperties": false
@@ -503,88 +455,6 @@
 				"description": "Получение имени пользователя по ID<br />",
 				"tags": [
 					"user"
-				],
-				"security": [
-					{
-						"jwt": []
-					}
-				],
-				"parameters": []
-			}
-		},
-		"/api/device": {
-			"put": {
-				"operationId": "AddDevice",
-				"responses": {
-					"200": {
-						"description": "Ok",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/SuccesReq"
-								}
-							}
-						}
-					},
-					"400": {
-						"description": "AuthErrors",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/AuthError"
-								}
-							}
-						}
-					}
-				},
-				"description": "Добавление девайса<br />",
-				"tags": [
-					"Device"
-				],
-				"security": [
-					{
-						"jwt": []
-					}
-				],
-				"parameters": [],
-				"requestBody": {
-					"required": true,
-					"content": {
-						"application/json": {
-							"schema": {
-								"$ref": "#/components/schemas/addDevice"
-							}
-						}
-					}
-				}
-			},
-			"get": {
-				"operationId": "GetDevices",
-				"responses": {
-					"200": {
-						"description": "Ok",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/getDevices"
-								}
-							}
-						}
-					},
-					"400": {
-						"description": "AuthErrors",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/AuthError"
-								}
-							}
-						}
-					}
-				},
-				"description": "Получение девайсов<br />",
-				"tags": [
-					"Device"
 				],
 				"security": [
 					{

@@ -10,7 +10,7 @@ const prisma = new PrismaClient();
 
 class DeviceService {
   async addDevice(deviceData: addDevice, user: userDto): Promise<SuccesReq> {
-    await prisma.user.update({
+    await prisma.users.update({
       where: {
         id: user.userId,
       },

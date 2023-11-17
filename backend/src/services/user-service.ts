@@ -30,10 +30,9 @@ class UserService {
     // const role = phone === "1" ? "admin" : "user";
     const role = "user";
     const hashPassword = await bcrypt.hash(userRegistration.password, 3);
-    const newUser = await prisma.user.create({
+    const newUser = await prisma.users.create({
       data: {
-        userName: userRegistration.userName,
-        role: role,
+        link: userRegistration.userName,
         UserAuthes: {
           create: {
             login: userRegistration.login,
@@ -53,7 +52,6 @@ class UserService {
     const userData = {
       userId: newUser.id,
       login: newUser.UserAuthes[0].login,
-      role: newUser.role,
     } as userDto;
 
     const tokens = tokenService.generateTokens({ ...userData });
@@ -91,7 +89,6 @@ class UserService {
     const userData = {
       userId: authData.user.id,
       login: authData.login,
-      role: authData.user.role,
     } as userDto;
 
     const tokens = tokenService.generateTokens({ ...userData });
@@ -111,7 +108,7 @@ class UserService {
       throw ApiError.UnathorizedError;
     }
 
-    const user = await prisma.user.findFirst({
+    const user = await prisma.users.findFirst({
       where: {
         id: userData.userId,
       },
@@ -133,7 +130,6 @@ class UserService {
     const userDto = {
       userId: user.id,
       login: user.UserAuthes[0].login,
-      role: user.role,
     } as userDto;
     const tokens = tokenService.generateTokens({ ...userDto });
 
@@ -149,14 +145,13 @@ class UserService {
   }
 
   async getUserData(user: userDto): Promise<userData> {
-    const userData = await prisma.user.findFirstOrThrow({
+    const userData = await prisma.users.findFirstOrThrow({
       where: {
         id: user.userId,
       },
     });
     return {
-      userName: userData.userName,
-      role: userData.role,
+      userName: userData.link,
     };
   }
 }

@@ -83,7 +83,7 @@ class TokenService {
   }
 
   async saveToken(userId: number, refreshToken: string) {
-    await prisma.user.update({
+    await prisma.users.update({
       where: {
         id: userId,
       },

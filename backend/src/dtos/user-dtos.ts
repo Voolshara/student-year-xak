@@ -29,5 +29,4 @@ export interface succesAuthDto {
 
 export interface userData {
   userName: string;
-  role: string;
 }
