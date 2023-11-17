@@ -3,7 +3,7 @@ import "../globals.css";
 
 export const metadata: Metadata = {
   title: "Login Page",
-  description: "ALice Smart House | Login Page",
+  description: "Task Tracker | Login Page",
 };
 export default function RootLayout({
   children,
