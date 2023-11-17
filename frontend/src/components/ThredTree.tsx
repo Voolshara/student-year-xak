@@ -10,20 +10,21 @@ interface Props {
 export default function ThredTree({ thredData, nowLevel }: Props) {
   const [isClosed, setCloseState] = useState<boolean>(
     thredData.Threds !== null
+    // false
   );
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col w-full">
       <div
-        className="flex flex-row gap-x-5 items-center py-3"
+        className="flex flex-row gap-x-4 items-center py-3"
         onClick={() => {
           if (thredData.Threds !== null) setCloseState(!isClosed);
         }}
       >
         {Array.from({ length: nowLevel }, (x, i) => i).map((i) => (
-          <p key={i} className="text-gray-400 w-[22px] text-center h-full">
+          <div key={i} className="text-gray-400 w-[22px] text-center h-full">
             |
-          </p>
+          </div>
         ))}
         {thredData.Threds !== null ? (
           !isClosed ? (
@@ -73,7 +74,11 @@ export default function ThredTree({ thredData, nowLevel }: Props) {
           </svg>
         )}
 
-        <ThredElement thredData={thredData} />
+        <ThredElement
+          thredData={thredData}
+          nowLevel={nowLevel}
+          isLast={thredData.Threds === null}
+        />
       </div>
 
       {!isClosed && thredData.Threds !== null ? (

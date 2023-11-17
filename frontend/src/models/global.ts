@@ -6,10 +6,15 @@ export interface Project {
 export interface Thred {
   id: number;
   title: string;
-  solver: number | undefined;
-  tag: string | undefined;
+  solver: string | undefined;
+  tags: string[] | undefined;
 }
 
 export interface ThredStructure extends Thred {
   Threds: ThredStructure[] | null;
+}
+
+export interface Status {
+  type: number;
+  num: number | undefined;
 }
