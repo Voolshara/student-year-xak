@@ -2,9 +2,9 @@
 
 namespace Treker.Backend.Types
 {
-    public class User
+    public class Report
     {
-        public Models.User user { get; set; }
+        public Models.Report report { get; set; }
 
         public Task Add()
         {
@@ -14,12 +14,12 @@ namespace Treker.Backend.Types
                 {
                     try
                     {
-                        await db.Users.AddAsync(this.user);
+                        await db.Reports.AddAsync(this.report);
                         await db.SaveChangesAsync();
                     }
                     catch (Exception ex)
                     {
-                        throw new Exception($"Error while adding new user\n{ex.Message}");
+                        throw new Exception($"Error while adding new report\n{ex.Message}");
                     }
 
                 }
@@ -36,14 +36,14 @@ namespace Treker.Backend.Types
                     try
                     {
 
-                        var user = db.Users.Where(user => user.Link == this.user.Link || user.Id == this.user.Id).FirstOrDefault();
-                        db.Update(user).CurrentValues.SetValues(this.user);
+                        var report = db.Reports.Where(rep => rep.Id == this.report.Id).FirstOrDefault();
+                        db.Update(report).CurrentValues.SetValues(this.report);
                         await db.SaveChangesAsync();
 
                     }
                     catch (Exception ex)
                     {
-                        throw new Exception($"Error while updating user {this.user.Link}\n{ex.Message}");
+                        throw new Exception($"Error while updating report {this.report.Id}\n{ex.Message}");
                     }
 
                 }
@@ -61,16 +61,16 @@ namespace Treker.Backend.Types
                     try
                     {
 
-                        var user = db.Users.Where(user => user.Link == this.user.Link || user.Id == this.user.Id).FirstOrDefault();
-                        if (user != null)
+                        var report = db.Reports.Where(rep => rep.Id == this.report.Id).FirstOrDefault();
+                        if (report != null)
                             return;
 
-                        this.user = user;
+                        this.report = report;
 
                     }
                     catch (Exception ex)
                     {
-                        throw new Exception($"Error while geting user {this.user.Link}\n{ex.Message}");
+                        throw new Exception($"Error while geting  report {this.report.Id}\n{ex.Message}");
                     }
 
                 }
@@ -87,18 +87,20 @@ namespace Treker.Backend.Types
                     try
                     {
 
-                        var user = db.Users.Where(user => user.Link == this.user.Link || user.Id == this.user.Id).FirstOrDefault();
-                        db.Users.Remove(user);
+                        var report = db.Reports.Where(rep => rep.Id == this.report.Id).FirstOrDefault();
+                        db.Reports.Remove(report);
                         await db.SaveChangesAsync();
                     }
                     catch (Exception ex)
                     {
-                        throw new Exception($"Error while geting user {this.user.Link}\n{ex.Message}");
+                        throw new Exception($"Error while geting report {this.report.Id}\n{ex.Message}");
                     }
 
                 }
 
             });
         }
+
+
     }
 }

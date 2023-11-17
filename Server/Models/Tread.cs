@@ -18,4 +18,6 @@ public partial class Tread
     public virtual User CreatorNavigation { get; set; } = null!;
 
     public virtual Project ProjectNavigation { get; set; } = null!;
+
+    public virtual ICollection<Report> Reports { get; } = new List<Report>();
 }
