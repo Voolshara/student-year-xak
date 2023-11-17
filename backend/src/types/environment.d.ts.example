@@ -1,0 +1,12 @@
+declare global {
+  namespace NodeJS {
+    interface ProcessEnv {
+      JWT_ACCESS_SECRET: "some value";
+      JWT_REFRESH_SECRET: "some value";
+      API_URL: "http://localhost:5000";
+      CLIENT_URL: "http://localhost:3000";
+    }
+  }
+}
+
+export {};

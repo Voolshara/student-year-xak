@@ -1,0 +1,603 @@
+{
+	"components": {
+		"examples": {},
+		"headers": {},
+		"parameters": {},
+		"requestBodies": {},
+		"responses": {},
+		"schemas": {
+			"PingResponse": {
+				"properties": {
+					"message": {
+						"type": "string"
+					},
+					"status": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"message",
+					"status"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"userDto": {
+				"properties": {
+					"userId": {
+						"type": "number",
+						"format": "double"
+					},
+					"login": {
+						"type": "string"
+					},
+					"role": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"userId",
+					"login",
+					"role"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"succesAuthDto": {
+				"properties": {
+					"user": {
+						"$ref": "#/components/schemas/userDto"
+					},
+					"accessToken": {
+						"type": "string"
+					},
+					"refreshToken": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"user",
+					"accessToken",
+					"refreshToken"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ManySmsRequests": {
+				"properties": {
+					"message": {
+						"type": "string",
+						"enum": [
+							"Слишком часто, повторите попытку позже"
+						],
+						"nullable": false
+					},
+					"error": {
+						"properties": {
+							"type": {
+								"type": "string",
+								"enum": [
+									"ManySmsRequests"
+								],
+								"nullable": false
+							}
+						},
+						"required": [
+							"type"
+						],
+						"type": "object"
+					}
+				},
+				"required": [
+					"message",
+					"error"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"userRigistration": {
+				"properties": {
+					"userName": {
+						"type": "string"
+					},
+					"login": {
+						"type": "string"
+					},
+					"password": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"userName",
+					"login",
+					"password"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"userLogin": {
+				"properties": {
+					"login": {
+						"type": "string"
+					},
+					"password": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"login",
+					"password"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"AuthError": {
+				"properties": {
+					"message": {
+						"type": "string"
+					},
+					"error": {
+						"properties": {
+							"type": {
+								"type": "string"
+							}
+						},
+						"required": [
+							"type"
+						],
+						"type": "object"
+					}
+				},
+				"required": [
+					"message",
+					"error"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"refreshTokens": {
+				"properties": {
+					"refreshToken": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"refreshToken"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"SuccesReq": {
+				"properties": {
+					"message": {
+						"type": "string",
+						"enum": [
+							"success"
+						],
+						"nullable": false
+					}
+				},
+				"required": [
+					"message"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"userData": {
+				"properties": {
+					"userName": {
+						"type": "string"
+					},
+					"role": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"userName",
+					"role"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"addDevice": {
+				"properties": {
+					"deviceName": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"deviceName"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"Device": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"name": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"id",
+					"name"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"getDevices": {
+				"properties": {
+					"items": {
+						"items": {
+							"$ref": "#/components/schemas/Device"
+						},
+						"type": "array"
+					}
+				},
+				"required": [
+					"items"
+				],
+				"type": "object",
+				"additionalProperties": false
+			}
+		},
+		"securitySchemes": {
+			"jwt": {
+				"type": "http",
+				"description": "Access Token",
+				"scheme": "bearer",
+				"bearerFormat": "JWT",
+				"name": "jwt",
+				"in": "header"
+			}
+		}
+	},
+	"info": {
+		"title": "",
+		"contact": {}
+	},
+	"openapi": "3.0.0",
+	"paths": {
+		"/api/ping": {
+			"get": {
+				"operationId": "GetMessage",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/PingResponse"
+								}
+							}
+						}
+					}
+				},
+				"description": "Проверка статуса сервера",
+				"security": [],
+				"parameters": []
+			}
+		},
+		"/api/registration": {
+			"post": {
+				"operationId": "Registration",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/succesAuthDto"
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "ManySmsRequests",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ManySmsRequests"
+								},
+								"examples": {
+									"Example 1": {
+										"value": {
+											"message": "Слишком часто, повторите попытку позже",
+											"error": {
+												"type": "ManySmsRequests"
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				},
+				"description": "Регистрация пользователя",
+				"tags": [
+					"user"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/userRigistration"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/login": {
+			"post": {
+				"operationId": "Login",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/succesAuthDto"
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "ManySmsRequests",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ManySmsRequests"
+								},
+								"examples": {
+									"Example 1": {
+										"value": {
+											"message": "Слишком часто, повторите попытку позже",
+											"error": {
+												"type": "ManySmsRequests"
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"user"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/userLogin"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/refresh": {
+			"get": {
+				"operationId": "RefreshTokens",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/succesAuthDto"
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "AuthErrors",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/AuthError"
+								}
+							}
+						}
+					}
+				},
+				"description": "Получение новой пары access и refresh токенов<br />\nПроверка входных данных refresh токена в `запросе`<br />\nВозвращаемые данные: объект пользователя и пара токенов или сообщение об ошибке, так же токены внутри куки <br />",
+				"tags": [
+					"user"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "query",
+						"name": "refreshToken",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
+		},
+		"/api/logout": {
+			"post": {
+				"operationId": "DeleteTokens",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/SuccesReq"
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "AuthErrors",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/AuthError"
+								}
+							}
+						}
+					}
+				},
+				"description": "Получение новой пары access и refresh токенов<br />\nПроверка входных данных refresh токена в `запросе`<br />\nВозвращаемые данные: объект пользователя и пара токенов или сообщение об ошибке, так же токены внутри куки <br />",
+				"tags": [
+					"user"
+				],
+				"security": [
+					{
+						"jwt": []
+					}
+				],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/userDto"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/user": {
+			"get": {
+				"operationId": "GetUserData",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/userData"
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "AuthErrors",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/AuthError"
+								}
+							}
+						}
+					}
+				},
+				"description": "Получение имени пользователя по ID<br />",
+				"tags": [
+					"user"
+				],
+				"security": [
+					{
+						"jwt": []
+					}
+				],
+				"parameters": []
+			}
+		},
+		"/api/device": {
+			"put": {
+				"operationId": "AddDevice",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/SuccesReq"
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "AuthErrors",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/AuthError"
+								}
+							}
+						}
+					}
+				},
+				"description": "Добавление девайса<br />",
+				"tags": [
+					"Device"
+				],
+				"security": [
+					{
+						"jwt": []
+					}
+				],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/addDevice"
+							}
+						}
+					}
+				}
+			},
+			"get": {
+				"operationId": "GetDevices",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/getDevices"
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "AuthErrors",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/AuthError"
+								}
+							}
+						}
+					}
+				},
+				"description": "Получение девайсов<br />",
+				"tags": [
+					"Device"
+				],
+				"security": [
+					{
+						"jwt": []
+					}
+				],
+				"parameters": []
+			}
+		}
+	},
+	"servers": [
+		{
+			"url": "/"
+		}
+	]
+}
