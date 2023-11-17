@@ -28,17 +28,17 @@
 						"type": "number",
 						"format": "double"
 					},
-					"login": {
+					"link": {
 						"type": "string"
 					},
-					"role": {
-						"type": "string"
+					"isAdmin": {
+						"type": "boolean"
 					}
 				},
 				"required": [
 					"userId",
-					"login",
-					"role"
+					"link",
+					"isAdmin"
 				],
 				"type": "object",
 				"additionalProperties": false
@@ -191,6 +191,198 @@
 				},
 				"required": [
 					"userName"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"Project": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"title": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"id",
+					"title"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ThreadsPut": {
+				"properties": {
+					"title": {
+						"type": "string"
+					},
+					"comment": {
+						"type": "string"
+					},
+					"tag": {
+						"items": {
+							"type": "string"
+						},
+						"type": "array"
+					},
+					"parent_id": {
+						"type": "number",
+						"format": "double",
+						"nullable": true
+					},
+					"id": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"required": [
+					"title",
+					"comment",
+					"tag",
+					"parent_id"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"user": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"link": {
+						"type": "string"
+					},
+					"isAdmin": {
+						"type": "boolean"
+					}
+				},
+				"required": [
+					"id",
+					"link",
+					"isAdmin"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"Thread": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"creation_date": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"solver": {
+						"allOf": [
+							{
+								"$ref": "#/components/schemas/user"
+							}
+						],
+						"nullable": true
+					},
+					"creator": {
+						"$ref": "#/components/schemas/user"
+					},
+					"title": {
+						"type": "string"
+					},
+					"comment": {
+						"type": "string"
+					},
+					"state_done": {
+						"type": "number",
+						"format": "double"
+					},
+					"state_error": {
+						"type": "number",
+						"format": "double"
+					},
+					"state_none": {
+						"type": "number",
+						"format": "double"
+					},
+					"state_skip": {
+						"type": "number",
+						"format": "double"
+					},
+					"tag": {
+						"items": {
+							"type": "string"
+						},
+						"type": "array"
+					},
+					"childThreads": {
+						"items": {
+							"$ref": "#/components/schemas/Thread"
+						},
+						"type": "array"
+					},
+					"parent_id": {
+						"type": "number",
+						"format": "double"
+					},
+					"reports": {
+						"items": {
+							"$ref": "#/components/schemas/Reports"
+						},
+						"type": "array"
+					}
+				},
+				"required": [
+					"id",
+					"creation_date",
+					"solver",
+					"creator",
+					"title",
+					"state_done",
+					"state_error",
+					"state_none",
+					"state_skip",
+					"tag",
+					"childThreads",
+					"reports"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"%24Result.DefaultSelection_Prisma.%24ReportsPayload_": {
+				"properties": {
+					"url": {
+						"type": "string"
+					},
+					"tredId": {
+						"type": "number",
+						"format": "double"
+					},
+					"id": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"required": [
+					"url",
+					"tredId",
+					"id"
+				],
+				"type": "object"
+			},
+			"Reports": {
+				"$ref": "#/components/schemas/%24Result.DefaultSelection_Prisma.%24ReportsPayload_",
+				"description": "Model Reports"
+			},
+			"ThreadsGet": {
+				"properties": {
+					"proj_id": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"required": [
+					"proj_id"
 				],
 				"type": "object",
 				"additionalProperties": false
@@ -462,6 +654,138 @@
 					}
 				],
 				"parameters": []
+			}
+		},
+		"/api/projects": {
+			"get": {
+				"operationId": "GetProjects",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"$ref": "#/components/schemas/Project"
+									},
+									"type": "array"
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "AuthErrors",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/AuthError"
+								}
+							}
+						}
+					}
+				},
+				"description": "Получение Проектов<br />",
+				"tags": [
+					"Threads"
+				],
+				"security": [
+					{
+						"jwt": []
+					}
+				],
+				"parameters": []
+			}
+		},
+		"/api/thread": {
+			"put": {
+				"operationId": "AddThread",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/SuccesReq"
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "AuthErrors",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/AuthError"
+								}
+							}
+						}
+					}
+				},
+				"description": "Добавление / Изменение тредов<br />",
+				"tags": [
+					"Threads"
+				],
+				"security": [
+					{
+						"jwt": []
+					}
+				],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/ThreadsPut"
+							}
+						}
+					}
+				}
+			},
+			"get": {
+				"operationId": "GetThreads",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/Thread"
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "AuthErrors",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/AuthError"
+								}
+							}
+						}
+					}
+				},
+				"description": "Получение тредов<br />",
+				"tags": [
+					"Threads"
+				],
+				"security": [
+					{
+						"jwt": []
+					}
+				],
+				"parameters": [
+					{
+						"in": "query",
+						"name": "proj_id",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
 			}
 		}
 	},

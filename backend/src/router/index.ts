@@ -1,11 +1,13 @@
 import { Request, Response, NextFunction } from "express";
 import PingController from "../controllers/ping-controller";
 import { userRoutes } from "./user-routers";
+import { threadsRoutes } from "./threads-router";
 const Router = require("express").Router;
 
 const router = new Router();
 
 router.use("/", userRoutes);
+router.use("/", threadsRoutes);
 
 router.get(
   "/ping",
