@@ -1,0 +1,26 @@
+{
+  "entryFile": "src/index.ts",
+  "noImplicitAdditionalProperties": "throw-on-extras",
+  "spec": {
+    "outputDirectory": "public",
+    "specVersion": 3,
+    "securityDefinitions": {
+      "jwt": {
+        "type": "http",
+        "description": "Access Token",
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "name": "jwt",
+        "in": "header"
+      }
+    },
+    "security": [{ "jwt": [] }]
+  },
+  "routes": {
+    "controllerPathGlobs": [
+      "./src/router/**/*.ts",
+      "./src/controlers/**/*.ts",
+      "./src/controlers/admin/**/*.ts"
+    ]
+  }
+}
