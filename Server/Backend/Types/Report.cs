@@ -62,7 +62,7 @@ namespace Treker.Backend.Types
                     {
 
                         var report = db.Reports.Where(rep => rep.Id == this.report.Id).FirstOrDefault();
-                        if (report != null)
+                        if (report == null)
                             return;
 
                         this.report = report;

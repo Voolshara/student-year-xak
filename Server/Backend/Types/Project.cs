@@ -64,7 +64,7 @@ namespace Treker.Backend.Types
                     {
 
                         var project = db.Projects.Where(proj => proj.Id == this.project.Id).FirstOrDefault();
-                        if (project != null)
+                        if (project == null)
                             return;
 
                         this.project = project;

@@ -21,6 +21,8 @@ public partial class Tread
 
     public string? Executor { get; set; }
 
+    public string Title { get; set; } = null!;
+
     public virtual User CreatorNavigation { get; set; } = null!;
 
     public virtual User? ExecutorNavigation { get; set; }

@@ -92,6 +92,7 @@ public partial class TrakerContext : DbContext
             entity.Property(e => e.Tag)
                 .HasMaxLength(255)
                 .HasColumnName("tag");
+            entity.Property(e => e.Title).HasMaxLength(255);
 
             entity.HasOne(d => d.CreatorNavigation).WithMany(p => p.TreadCreatorNavigations)
                 .HasForeignKey(d => d.Creator)

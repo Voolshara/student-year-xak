@@ -71,7 +71,7 @@ namespace Treker.Services.Project
 
         public override Task<DeleteProjectResponse> DeleteProject(DeleteProjectRequest request, ServerCallContext context)
         {
-            _logger.LogInformation("Create new project request");
+            _logger.LogInformation("Delete  project request");
 
             string state = "OK";
             int code = 200;

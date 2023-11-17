@@ -1,6 +1,7 @@
 using Treker;
 using Treker.Services;
 using Treker.Services.Project;
+using Treker.Services.TreadServices;
 using Treker.Services.UserServices;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -18,6 +19,10 @@ app.MapGrpcService<GreeterService>();
 app.MapGrpcService<ProjectGetterService>();
 app.MapGrpcService<ProjectWorkerService>();
 app.MapGrpcService<UserWorkerService>();
+app.MapGrpcService<UserGetterService>();
+app.MapGrpcService<TreadWorkerService>();
+app.MapGrpcService<TreadGetterService>();
+
 
 app.MapGet("/", () => "Communication with gRPC endpoints must be made through a gRPC client. To learn how to create a client, visit: https://go.microsoft.com/fwlink/?linkid=2086909");
 

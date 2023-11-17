@@ -13,7 +13,7 @@ service ProjectWorker {
 service ProjectGetter{
   rpc GetProject (GetProjectRequest) returns (GetProjectResponse);
   rpc GetProjectTopics (GetProjectTopicsRequest) returns (GetProjectTopicsResponse);
-
+  
 }
 //===============================
 
@@ -59,6 +59,7 @@ message GetProjectTopicsRequest {
 }
 
 message GetProjectTopicsResponse {
+    repeated string titles =1;
 }
 
 //===============================

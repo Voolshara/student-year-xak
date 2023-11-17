@@ -1,0 +1,122 @@
+syntax = "proto3";
+
+option csharp_namespace = "Treker";
+
+package tread_proto;
+
+
+service TreadWorker {
+    rpc CreateTread (CreateTreadRequest) returns (CreateTreadResponse);
+    rpc DeleteTread  (DeleteTreadRequest) returns (DeleteTreadResponse);
+
+    rpc AtachExecutor(AtachExecutorRequest) returns (AtachExecutorResponse);
+    rpc ChangeState (ChangeStateRequest) returns (ChangeStateResponse);
+    rpc ChangeTag (ChangeTagRequest) returns (ChangeTagResponse);
+    rpc ChangeComment (ChangeCommentRequest) returns (ChangeCommentResponse);
+    rpc AddReport (AddReportRequest) returns (AddReportResponse);
+
+}
+service TreadGetter{
+    rpc GetTread (GetTreadRequest) returns (TreadResponse);
+    rpc GetReports (GetTreadReportsRequest) returns (GetTreadReportsResponse);
+
+}
+
+//====================================
+message CreateTreadRequest{
+    int32 project_id =1;
+    int32 user_id = 2;
+    int32 parent = 3; // 0 == null
+    string title =4;
+}
+message CreateTreadResponse{
+    int32 tread_id =1 ;
+    string state = 2;
+    int32 code = 3;
+    
+}
+//====================================
+message DeleteTreadRequest{
+    int32 tread_id =1;
+}
+message DeleteTreadResponse{
+    string state = 1;
+    int32 code = 2;
+}
+//====================================
+message AtachExecutorRequest{
+    int32 tread_id =1;
+    int32 user_id =2;
+}
+message AtachExecutorResponse{
+    string state = 1;
+    int32 code = 2;
+}//====================================
+message ChangeStateRequest{
+    int32 tread_id =1;
+    int32 state =2;
+  
+}
+message ChangeStateResponse{
+    string state = 1;
+    int32 code = 2;
+}
+//====================================
+message ChangeTagRequest{
+    int32 tread_id =1;
+    string tag = 2;
+  
+}
+message ChangeTagResponse{
+    string state = 1;
+    int32 code = 2;
+}
+//====================================
+message ChangeCommentRequest{
+    int32 tread_id =1;
+    string comment = 2;
+  
+}
+message ChangeCommentResponse{
+    string state = 1;
+    int32 code = 2;
+}
+//====================================
+message AddReportRequest{
+    int32 tread_id =1;
+    int32 url = 2;
+  
+}
+message AddReportResponse{
+    string state = 1;
+    int32 code = 2;
+}
+//====================================
+message GetTreadRequest{
+    int32 tread_id =1;
+}
+message TreadResponse{
+    int32 parent = 1;
+    int32 creator = 2;
+    string comment =3;
+    int32 project = 4;
+    int32 state = 5;
+    string tag = 6;
+    string executor = 7;
+    repeated  int32 sub_treads = 8;
+    string title = 9;
+}
+//========================================
+message GetTreadReportsRequest{
+    int32 tread_id =1;
+
+}
+message GetTreadReportsResponse{
+     string state = 1;
+    int32 code = 2;
+    repeated Report  reports=3;
+}
+message Report{
+    int32 report_id = 1;
+    string url =2;
+}

@@ -14,13 +14,13 @@ namespace Treker.Services.UserServices
             _logger = logger;
         }
 
-        public override Task<RegistationResponse> Registation(RegistationRequest request, ServerCallContext context)
+        public override Task<RegistrationResponse> Registration(RegistrationRequest request, ServerCallContext context)
         {
             _logger.LogInformation("Reg new user request");
 
             string state = "OK";
             int code = 200;
-            var response = new RegistationResponse();
+            var response = new RegistrationResponse();
 
 
             var user = new Backend.Types.User() { user = new Models.User() { Link = request.Link } };
@@ -29,7 +29,7 @@ namespace Treker.Services.UserServices
 
             response.State = state;
             response.Code = code;
-            response.UserId = user_id;  
+            response.UserId = user_id;
 
             return Task.FromResult(response);
         }

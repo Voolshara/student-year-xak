@@ -62,9 +62,9 @@ namespace Treker.Backend.Types
                 {
                     try
                     {
+                        var user = db.Users.Where(user => user.Id == this.user.Id).FirstOrDefault();
 
-                        var user = db.Users.Where(user => user.Link == this.user.Link || user.Id == this.user.Id).FirstOrDefault();
-                        if (user != null)
+                        if (user == null)
                             return;
 
                         this.user = user;

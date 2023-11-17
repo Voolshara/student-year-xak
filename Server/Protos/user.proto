@@ -6,17 +6,28 @@ package user_proto;
 
 service UserWorker{
 
-    rpc Registation (RegistationRequest) returns (RegistationResponse);
+    rpc Registration (RegistrationRequest) returns (RegistrationResponse);
 
 }
 service UserGetter{
+    rpc GetUser (GetUserRequest) returns (GetUserResponse);
 
 }
-message RegistationRequest{
+message RegistrationRequest{
     string link =1;
 
-}message RegistationResponse{
+}message RegistrationResponse{
     string state =1;
     int32 code =2;
     int32 user_id =3;
+}
+//==================================
+message GetUserRequest{
+    int32 user_id =1;
+
+}
+message GetUserResponse{
+    string state =1;
+    int32 code =2;
+    string link =3;
 }

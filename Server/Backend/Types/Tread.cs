@@ -63,7 +63,7 @@ namespace Treker.Backend.Types
                     {
 
                         var tread = db.Treads.Where(trd => trd.Id == this.tread.Id).FirstOrDefault();
-                        if (tread != null)
+                        if (tread == null)
                             return;
 
                         this.tread = tread;
@@ -109,6 +109,21 @@ namespace Treker.Backend.Types
                 try
                 {
                     return (db.Reports.Where(report => report.Tread == this.tread.Id).ToList().Select(rp => new Types.Report { report = rp })).ToList();
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception($"Error while geting reports in tread {this.tread.Id}\n{ex.Message}");
+                }
+
+            }
+        }
+        public List<Tread> GetSubTreads()
+        {
+            using (TrakerContext db = new TrakerContext())
+            {
+                try
+                {
+                    return (db.Treads.Where(tread => tread.Parent == this.tread.Id).ToList().Select(tr => new Types.Tread { tread = tr })).ToList();
                 }
                 catch (Exception ex)
                 {
