@@ -19,7 +19,7 @@ model Tokens {
 
 model UserAuth {
   id         Int      @id @default(autoincrement())
-  user       Users     @relation(fields: [userId], references: [id])
+  user       Users    @relation(fields: [userId], references: [id])
   userId     Int
   login      String   @db.VarChar(255)
   password   String   @db.VarChar(255)
@@ -27,48 +27,56 @@ model UserAuth {
 }
 
 model Projects {
-  id             Int      @id @default(autoincrement())
-  title          String   @db.VarChar(255)
-  creation_date_ DateTime @map("creation_date ") @db.Time(6)
-  creator        Int
-  users          Users    @relation(fields: [creator], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  tread          Tread[]
+  id            Int      @id @default(autoincrement())
+  title         String   @db.VarChar(255)
+  creation_date DateTime @default(now())
+  creator       Int
 
-  @@map("projects ")
+  user   Users[]
+  Thread Thread[]
 }
 
 model Reports {
-  id                         Int    @id(map: "Reports_pkey") @default(autoincrement())
-  tread                      Int
-  url                        String @db.VarChar(511)
-  tread_reports_treadTotread Tread  @relation("reports_treadTotread", fields: [tread], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Reports_tread_fkey")
+  id     Int    @id @default(autoincrement())
+  thred  Thread @relation(fields: [tredId], references: [id])
+  tredId Int
+  url    String @db.VarChar(511)
 }
 
-model Tread {
-  id                           Int       @id(map: "Tread_pkey") @default(autoincrement())
-  parent                       Int?
-  creator                      Int
-  comment                      String    @db.VarChar(255)
-  project                      Int       @default(0)
-  state                        Int       @default(1)
-  tag                          String?   @db.VarChar(255)
-  executor                     String?   @db.VarChar(255)
-  Title                        String?   @db.VarChar(255)
-  reports_reports_treadTotread Reports[] @relation("reports_treadTotread")
-  users_tread_creatorTousers   Users     @relation("tread_creatorTousers", fields: [creator], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Tread_creator_fkey")
-  projects_                    Projects @relation(fields: [project], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Tread_project_fkey")
-  users_tread_executorTousers  Users?    @relation("tread_executorTousers", fields: [executor], references: [link], onDelete: NoAction, onUpdate: NoAction)
+model Thread {
+  id Int @id @default(autoincrement())
+
+  solver   Users? @relation(fields: [solverId], references: [id], name: "executingThreds")
+  solverId Int?
+
+  creator   Users @relation(fields: [creatorId], references: [id])
+  creatorId Int
+
+  title   String? @db.VarChar(255)
+  comment String  @db.VarChar(255)
+
+  project   Projects @relation(fields: [projectId], references: [id])
+  projectId Int
+
+  state Int      @default(1)
+  tag   String[] @db.VarChar(255)
+
+  childThreads Thread[] @relation(name: "tree")
+
+  parent   Thread? @relation(fields: [parentId], references: [id], name: "tree")
+  parentId Int?
+
+  reports Reports[]
 }
 
 model Users {
-  id                          Int         @id @default(autoincrement())
-  link                        String      @db.VarChar(255)
-  projects_                   Projects[]
-  tread_tread_creatorTousers  Tread[]     @relation("tread_creatorTousers")
-  tread_tread_executorTousers Tread[]     @relation("tread_executorTousers")
+  id       Int        @id @default(autoincrement())
+  link     String     @db.VarChar(255)
+  projects Projects[]
 
+  createdThreds   Thread[]
+  executingThreds Thread[] @relation(name: "executingThreds")
 
   UserAuthes UserAuth[]
   Tokens     Tokens[]
-  @@unique([link], map: "users_link_link1_key")
 }
