@@ -2,62 +2,63 @@
 
 import React, { useContext, useEffect, useState } from "react";
 import NavBar from "@/components/NavBar";
-import StoreProvider, { Context } from "@/components/storeProvide";
-import { observer } from "mobx-react-lite";
-import AddDevice from "@/components/device/addDevice";
-import Device from "@/components/device/device";
-import DeviceService from "@/services/DeviceService";
-import { deviceData } from "@/models/response/DeviceResponse";
+import { Project } from "@/models/global";
+import ProjectELement from "@/components/project";
+
+const userName = "StanisLove";
+const proejcts = [
+  { id: 0, title: "Аудио" },
+  { id: 1, title: "Видео" },
+  { id: 2, title: "Сообщения" },
+] as Project[];
 
 function Home() {
-  const { store } = useContext(Context);
-  const [devices, setDevices] = useState<deviceData[]>([]);
-
-  async function addDevice(newDeviceName: string) {
-    await DeviceService.addDevice(newDeviceName);
-    await getDevices();
-  }
-
-  async function getDevices() {
-    const serverDevices = await DeviceService.getDevices();
-    // console.log(serverDevices.data);
-    setDevices(serverDevices.data.items);
-  }
-
-  useEffect(() => {
-    if (localStorage.getItem("token")) {
-      store.checkAuth();
-    }
-
-    getDevices();
-  }, []);
+  const [nowProject, setNowProject] = useState<Project>(proejcts[0]);
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-start">
-      <StoreProvider>
-        <NavBar />
+    <main className="flex w-screen min-h-screen flex-col items-center justify-start">
+      <NavBar />
 
-        <div className="w-5/6 h-full">
-          {store.isLoading ? (
-            <p>Please Wait...</p>
-          ) : store.isAuth ? (
-            <div className="mt-10 max-w-md flex flex-col gap-y-10 items-start justify-start">
-              <p className="text-5xl font-bold">Devices</p>
-              {/* <div className="w-full grid grid-cols-3 gap-x-10"> */}
-              <div className="w-full flex flex-col gap-y-5">
-                {devices.map((dev) => (
-                  <Device device={dev} key={dev.id} />
-                ))}
-                <AddDevice newDevice={addDevice} />
-              </div>
+      <div className="w-5/6 h-full flex flex-col items-start justify-center gap-y-20 mt-10">
+        <p className="text-3xl">
+          Привет, <strong>{userName}</strong>
+        </p>
+
+        <div className="w-full h-full flex flex-row items-start justify-between gap-x-10">
+          <div className="flex flex-col items-start justify-center w-1/4 ">
+            <div className="flex flex-row items-center gap-x-3">
+              <p className="text-2xl font-bold">Проекты</p>
             </div>
-          ) : (
-            <p>АВТОРИЗИРУЙТЕСЬ</p>
-          )}
+            <div className="flex flex-col items-start justify-center ml-7 mt-3 gap-y-4 w-full">
+              {proejcts.map((projectName, index) => (
+                <div
+                  key={index}
+                  className="flex flex-row gap-x-4 items-center h-6 cursor-pointer"
+                  onClick={() => {
+                    setNowProject(proejcts[index]);
+                  }}
+                >
+                  {projectName.id === nowProject.id ? (
+                    <p className="text-xl">●</p>
+                  ) : (
+                    <p className="w-[12px] text-center">-</p>
+                  )}
+                  <p className="text-md" key={projectName.id}>
+                    {projectName.title}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="flex h-full flex-col items-center justify-center w-3/4 ">
+            <ProjectELement project={nowProject} />
+          </div>
         </div>
-      </StoreProvider>
+      </div>
     </main>
   );
 }
 
-export default observer(Home);
+// export default observer(Home);
+export default Home;
