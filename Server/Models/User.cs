@@ -11,5 +11,7 @@ public partial class User
 
     public virtual ICollection<Project> Projects { get; } = new List<Project>();
 
-    public virtual ICollection<Tread> Treads { get; } = new List<Tread>();
+    public virtual ICollection<Tread> TreadCreatorNavigations { get; } = new List<Tread>();
+
+    public virtual ICollection<Tread> TreadExecutorNavigations { get; } = new List<Tread>();
 }

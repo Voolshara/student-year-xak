@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
-using Treker.Backend.Config;
 
 namespace Treker.Models;
 
@@ -25,11 +24,9 @@ public partial class TrakerContext : DbContext
     public virtual DbSet<User> Users { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        var _config = new ConfigManager();
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+        => optionsBuilder.UseNpgsql("Host=localhost;Port=5432;Database=traker;Username=postgres;Password=root;");
 
-        optionsBuilder.UseNpgsql(_config.GetConnetion());
-    }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Project>(entity =>
@@ -84,13 +81,27 @@ public partial class TrakerContext : DbContext
                 .HasMaxLength(255)
                 .HasColumnName("comment");
             entity.Property(e => e.Creator).HasColumnName("creator");
+            entity.Property(e => e.Executor)
+                .HasMaxLength(255)
+                .HasColumnName("executor");
             entity.Property(e => e.Parent).HasColumnName("parent");
             entity.Property(e => e.Project).HasColumnName("project");
+            entity.Property(e => e.State)
+                .HasDefaultValueSql("1")
+                .HasColumnName("state");
+            entity.Property(e => e.Tag)
+                .HasMaxLength(255)
+                .HasColumnName("tag");
 
-            entity.HasOne(d => d.CreatorNavigation).WithMany(p => p.Treads)
+            entity.HasOne(d => d.CreatorNavigation).WithMany(p => p.TreadCreatorNavigations)
                 .HasForeignKey(d => d.Creator)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("Tread_creator_fkey");
+
+            entity.HasOne(d => d.ExecutorNavigation).WithMany(p => p.TreadExecutorNavigations)
+                .HasPrincipalKey(p => p.Link)
+                .HasForeignKey(d => d.Executor)
+                .HasConstraintName("tread_executor_fkey");
 
             entity.HasOne(d => d.ProjectNavigation).WithMany(p => p.Treads)
                 .HasForeignKey(d => d.Project)

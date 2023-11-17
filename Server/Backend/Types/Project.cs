@@ -100,5 +100,23 @@ namespace Treker.Backend.Types
             });
         }
 
+        public List<Tread> GetRootTreads()
+        {
+            using (TrakerContext db = new TrakerContext())
+            {
+                try
+                {
+
+                    return (db.Treads.Where(tread => tread.Project == this.project.Id && tread.Parent == null).ToList().Select(tr => new Types.Tread { tread = tr })).ToList();
+
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception($"Error while geting root treads in project {this.project.Id}\n{ex.Message}");
+                }
+
+            }
+
+        }
     }
 }

@@ -15,7 +15,15 @@ public partial class Tread
 
     public int Project { get; set; }
 
+    public int State { get; set; }
+
+    public string? Tag { get; set; }
+
+    public string? Executor { get; set; }
+
     public virtual User CreatorNavigation { get; set; } = null!;
+
+    public virtual User? ExecutorNavigation { get; set; }
 
     public virtual Project ProjectNavigation { get; set; } = null!;
 
