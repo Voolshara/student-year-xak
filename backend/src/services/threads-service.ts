@@ -68,29 +68,11 @@ class ThreadsService {
   }
 
   async editThread(thread: ThreadsEdit, user: userDto): Promise<SuccesReq> {
-    await prisma.thread.update({
-      where: {
-        id: thread.id,
-      },
-      data: {
-        title: thread.title,
-        comment: thread.comment,
-        creator: {
-          connect: {
-            id: user.userId,
-          },
+    if (thread.solver_id === undefined) {
+      await prisma.thread.update({
+        where: {
+          id: thread.id,
         },
-        tag: thread.tag,
-      },
-    });
-    return {
-      message: "success",
-    };
-  }
-
-  async addThread(thread: ThreadsCreate, user: userDto): Promise<SuccesReq> {
-    if (thread.parent_id === null) {
-      await prisma.thread.create({
         data: {
           title: thread.title,
           comment: thread.comment,
@@ -105,23 +87,111 @@ class ThreadsService {
     } else {
       await prisma.thread.update({
         where: {
-          id: thread.parent_id,
+          id: thread.id,
         },
         data: {
-          childThreads: {
-            create: {
-              title: thread.title,
-              comment: thread.comment,
-              creator: {
-                connect: {
-                  id: user.userId,
-                },
-              },
-              tag: thread.tag,
+          title: thread.title,
+          comment: thread.comment,
+          creator: {
+            connect: {
+              id: user.userId,
             },
           },
+          solver: {
+            connect: {
+              id: thread.solver_id,
+            },
+          },
+          tag: thread.tag,
         },
       });
+    }
+    return {
+      message: "success",
+    };
+  }
+
+  async addThread(thread: ThreadsCreate, user: userDto): Promise<SuccesReq> {
+    if (thread.parent_id === null) {
+      if (thread.solver_id === undefined) {
+        await prisma.thread.create({
+          data: {
+            title: thread.title,
+            comment: thread.comment,
+            creator: {
+              connect: {
+                id: user.userId,
+              },
+            },
+            tag: thread.tag,
+          },
+        });
+      } else {
+        await prisma.thread.create({
+          data: {
+            title: thread.title,
+            comment: thread.comment,
+            creator: {
+              connect: {
+                id: user.userId,
+              },
+            },
+            solver: {
+              connect: {
+                id: thread.solver_id,
+              },
+            },
+            tag: thread.tag,
+          },
+        });
+      }
+    } else {
+      if (thread.solver_id === undefined) {
+        await prisma.thread.update({
+          where: {
+            id: thread.parent_id,
+          },
+          data: {
+            childThreads: {
+              create: {
+                title: thread.title,
+                comment: thread.comment,
+                creator: {
+                  connect: {
+                    id: user.userId,
+                  },
+                },
+                tag: thread.tag,
+              },
+            },
+          },
+        });
+      } else {
+        await prisma.thread.update({
+          where: {
+            id: thread.parent_id,
+          },
+          data: {
+            childThreads: {
+              create: {
+                title: thread.title,
+                comment: thread.comment,
+                creator: {
+                  connect: {
+                    id: user.userId,
+                  },
+                },
+                tag: thread.tag,
+              },
+            },
+            solver: {
+              connect: {
+                id: thread.solver_id,
+              },
+            },
+          },
+        });
+      }
     }
 
     return {

@@ -48,6 +48,7 @@ threadsRoutes.put(
     try {
       const user = req.user;
       const Thread = req.body as ThreadsPut;
+      console.log(Thread);
       const controller = new ThreadController();
       const response = await controller.addThread(Thread, user);
       return res.send(response);

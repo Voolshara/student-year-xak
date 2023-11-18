@@ -9,6 +9,8 @@ export interface ThreadsGet {
 export interface ThreadsCreate {
   title: string;
   comment: string;
+  nowStatus: number;
+  solver_id: number | undefined;
   tag: string[];
   parent_id: number | null;
 }

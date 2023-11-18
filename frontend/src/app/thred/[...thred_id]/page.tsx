@@ -8,10 +8,11 @@ import StoreProvider, { Context } from "@/components/storeProvide";
 import { observer } from "mobx-react-lite";
 import { useEffect, useContext } from "react";
 import ThreadService from "@/services/ThredsService";
+import { IUser } from "@/models/IUser";
 
 interface Props {
   params: {
-    thred_id: number[];
+    thred_id: string[];
   };
 }
 
@@ -24,29 +25,38 @@ function ThredEdit({ params }: Props) {
     }
   }, []);
 
-  const [tags, setTags] = useState<string[]>(["Dev"]);
+  const [tags, setTags] = useState<string[]>([]);
 
   const [isSaved, setIsSaved] = useState<boolean>(true);
   const [title, setTitle] = useState<string>("");
   const [comment, setComment] = useState<string>("");
-  const [solver, setSolver] = useState<string>("");
+  const [solver, setSolver] = useState<number>();
   const [tagName, setTagName] = useState<string>("");
   const [nowStatus, setNowStatus] = useState<number>(-1);
 
   const [isNew, setIsNew] = useState<boolean>(false);
-  const [thread_id, setThread_id] = useState<number>(-1);
+  const [thread_id, setThread_id] = useState<string>(params.thred_id[1]);
+
+  const [users, setUsers] = useState<IUser[]>();
+
+  async function fetchData() {
+    const users = await ThreadService.getUsers();
+    setUsers(users);
+  }
 
   useEffect(() => {
-    if (params.thred_id[0] === -1) setIsNew(true);
-    setThread_id(params.thred_id[1]);
+    if (params.thred_id[0] === "-1") setIsNew(true);
+    fetchData();
   }, []);
 
   function save() {
     if (isNew) {
       ThreadService.putThreads({
         id: undefined,
+        nowStatus: nowStatus,
         comment: comment,
-        parent_id: thread_id === -1 ? null : thread_id,
+        parent_id: thread_id === "-1" ? null : parseInt(thread_id),
+        solver_id: solver,
         tag: tags,
         title: title,
       });
@@ -60,12 +70,10 @@ function ThredEdit({ params }: Props) {
 
         <div className="w-11/12 bg-white z-30 p-10 pt-20 rounded-xl flex flex-col gap-y-5 items-start justify-center">
           {isNew ? (
-            <p className="font-bold text-3xl mb-12">
-              Создание задачи: {thread_id}
-            </p>
+            <p className="font-bold text-3xl mb-12">Создание задачи: {title}</p>
           ) : (
             <p className="font-bold text-3xl mb-12">
-              Изменение Задачи: {thread_id}
+              Изменение Задачи: {title}
             </p>
           )}
 
@@ -104,7 +112,34 @@ function ThredEdit({ params }: Props) {
 
             <div className="flex flex-col gap-y-3">
               <p className="text-xl">Ответственный:</p>
-              <input
+              <div className="flex flex-row gap-x-2">
+                {users?.map((u, index) =>
+                  u.userId === solver ? (
+                    <p
+                      onClick={() => {
+                        setSolver(u.userId);
+                        setIsSaved(false);
+                      }}
+                      key={index}
+                      className="px-3 py-1 cursor-pointer border-gray-800 border-2 rounded-xl bg-gray-800 text-white"
+                    >
+                      {u.link}
+                    </p>
+                  ) : (
+                    <p
+                      onClick={() => {
+                        setSolver(u.userId);
+                        setIsSaved(false);
+                      }}
+                      key={index}
+                      className="px-3 py-1 cursor-pointer border-gray-500 border-2 rounded-xl"
+                    >
+                      {u.link}
+                    </p>
+                  )
+                )}
+              </div>
+              {/* <input
                 type="text"
                 className="border-b-2 border-black focus:outline-none"
                 value={solver}
@@ -112,7 +147,7 @@ function ThredEdit({ params }: Props) {
                   setSolver(e.target.value);
                   setIsSaved(false);
                 }}
-              />
+              /> */}
             </div>
 
             <div className="flex flex-col gap-y-3">

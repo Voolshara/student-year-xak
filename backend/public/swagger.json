@@ -220,6 +220,14 @@
 					"comment": {
 						"type": "string"
 					},
+					"nowStatus": {
+						"type": "number",
+						"format": "double"
+					},
+					"solver_id": {
+						"type": "number",
+						"format": "double"
+					},
 					"tag": {
 						"items": {
 							"type": "string"
@@ -239,6 +247,7 @@
 				"required": [
 					"title",
 					"comment",
+					"nowStatus",
 					"tag",
 					"parent_id"
 				],

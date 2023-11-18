@@ -2,10 +2,16 @@ import { getDevicesResponse } from "@/models/response/DeviceResponse";
 import $api from "../http";
 import { Project, SuccesReq } from "@/models/response/GlobalRespnose";
 import { Thread, ThreadsPut } from "@/models/global";
+import { IUser } from "@/models/IUser";
 
 export default class ThreadService {
   static async getProjects(): Promise<Project[]> {
     const fetchData = $api.get<Project[]>("/projects");
+    return (await fetchData).data;
+  }
+
+  static async getUsers(): Promise<IUser[]> {
+    const fetchData = $api.get<IUser[]>("/users");
     return (await fetchData).data;
   }
 
@@ -19,9 +25,7 @@ export default class ThreadService {
   }
 
   static async putThreads(body: ThreadsPut): Promise<SuccesReq> {
-    const fetchData = $api.put<SuccesReq>("/thread", {
-      params: body,
-    });
+    const fetchData = $api.put<SuccesReq>("/thread", body);
     return (await fetchData).data;
   }
 
