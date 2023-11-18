@@ -1,9 +1,12 @@
 "use client";
 import NavBar from "@/components/NavBar";
 import Link from "next/link";
-import StoreProvider from "@/components/storeProvide";
+import { useContext, useEffect } from "react";
+import StoreProvider, { Context } from "@/components/storeProvide";
 
 export function ThredEdit() {
+  const { store } = useContext(Context);
+
   useEffect(() => {
     if (localStorage.getItem("token")) {
       store.checkAuth();
