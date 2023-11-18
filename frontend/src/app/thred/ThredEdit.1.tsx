@@ -1,14 +1,9 @@
 "use client";
-
 import NavBar from "@/components/NavBar";
-import { observer } from "mobx-react-lite";
 import Link from "next/link";
-import StoreProvider, { Context } from "@/components/storeProvide";
-import { useEffect, useContext } from "react";
+import StoreProvider from "@/components/storeProvide";
 
-function ThredEdit() {
-  const { store } = useContext(Context);
-
+export function ThredEdit() {
   useEffect(() => {
     if (localStorage.getItem("token")) {
       store.checkAuth();
@@ -47,5 +42,3 @@ function ThredEdit() {
     </main>
   );
 }
-
-export default observer(ThredEdit);

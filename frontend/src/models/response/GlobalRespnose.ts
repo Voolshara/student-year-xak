@@ -8,3 +8,8 @@ export interface AuthError {
 export interface SuccesReq {
   message: "success";
 }
+
+export interface Project {
+  id: number;
+  title: string;
+}

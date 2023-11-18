@@ -3,7 +3,6 @@ import { PrismaClient } from "@prisma/client";
 import { userDto } from "../dtos/user-dtos";
 import { SuccesReq } from "../dtos/global-dtos";
 import {
-  getThreads,
   Project,
   Thread,
   ThreadsCreate,

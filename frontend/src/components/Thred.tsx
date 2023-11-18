@@ -1,9 +1,9 @@
-import { Status, Thred } from "@/models/global";
+import { Status, Thread } from "@/models/global";
 import ThredStatus from "./status";
 import { useRouter } from "next/navigation";
 
 interface Props {
-  thredData: Thred;
+  thredData: Thread;
   nowLevel: number;
   isLast: boolean;
 }
@@ -37,11 +37,11 @@ export default function ThredElement({ thredData, nowLevel, isLast }: Props) {
           >
             {thredData.title}
           </p>
-          <p className="italic mr-5">{thredData.solver}</p>
+          <p className="italic mr-5">{thredData.solver?.link}</p>
         </div>
 
         <div className="z-10  flex flex-row items-start gap-2">
-          {thredData.tags?.map((tag, index) => (
+          {thredData.tag.map((tag, index) => (
             <div
               className="w-fit bg-white py px-2  border-2  rounded-xl"
               key={index}

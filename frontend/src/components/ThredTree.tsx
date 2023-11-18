@@ -1,16 +1,15 @@
-import { ThredStructure } from "@/models/global";
+import { Thread } from "@/models/global";
 import { useState } from "react";
 import ThredElement from "./Thred";
 
 interface Props {
-  thredData: ThredStructure;
+  thredData: Thread;
   nowLevel: number;
 }
 
 export default function ThredTree({ thredData, nowLevel }: Props) {
   const [isClosed, setCloseState] = useState<boolean>(
-    thredData.Threds !== null
-    // false
+    thredData.childThreads.length !== 0
   );
 
   return (
@@ -18,7 +17,7 @@ export default function ThredTree({ thredData, nowLevel }: Props) {
       <div
         className="flex flex-row gap-x-4 items-center py-3"
         onClick={() => {
-          if (thredData.Threds !== null) setCloseState(!isClosed);
+          if (thredData.childThreads.length !== 0) setCloseState(!isClosed);
         }}
       >
         {Array.from({ length: nowLevel }, (x, i) => i).map((i) => (
@@ -26,7 +25,7 @@ export default function ThredTree({ thredData, nowLevel }: Props) {
             |
           </div>
         ))}
-        {thredData.Threds !== null ? (
+        {thredData.childThreads.length !== 0 ? (
           !isClosed ? (
             <svg height="22" width="22" className="cursor-pointer">
               <circle
@@ -50,7 +49,7 @@ export default function ThredTree({ thredData, nowLevel }: Props) {
               />
             </svg>
           )
-        ) : !isClosed ? (
+        ) : (
           <svg height="22" width="22">
             <circle
               cx="11"
@@ -61,28 +60,17 @@ export default function ThredTree({ thredData, nowLevel }: Props) {
               fill="none"
             />
           </svg>
-        ) : (
-          <svg height="22" width="22">
-            <circle
-              cx="11"
-              cy="11"
-              r="10"
-              stroke="black"
-              strokeWidth={2}
-              // fill="none"
-            />
-          </svg>
         )}
 
         <ThredElement
           thredData={thredData}
           nowLevel={nowLevel}
-          isLast={thredData.Threds === null}
+          isLast={thredData.childThreads.length === 0}
         />
       </div>
 
-      {!isClosed && thredData.Threds !== null ? (
-        thredData.Threds.map((th) => (
+      {!isClosed && thredData.childThreads.length !== 0 ? (
+        thredData.childThreads.map((th) => (
           <ThredTree key={th.id} nowLevel={nowLevel + 1} thredData={th} />
         ))
       ) : (

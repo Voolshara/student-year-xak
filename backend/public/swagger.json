@@ -327,7 +327,7 @@
 					},
 					"reports": {
 						"items": {
-							"$ref": "#/components/schemas/Reports"
+							"$ref": "#/components/schemas/Report"
 						},
 						"type": "array"
 					}
@@ -349,30 +349,22 @@
 				"type": "object",
 				"additionalProperties": false
 			},
-			"%24Result.DefaultSelection_Prisma.%24ReportsPayload_": {
+			"Report": {
 				"properties": {
-					"url": {
-						"type": "string"
-					},
-					"tredId": {
-						"type": "number",
-						"format": "double"
-					},
 					"id": {
 						"type": "number",
 						"format": "double"
+					},
+					"url": {
+						"type": "string"
 					}
 				},
 				"required": [
-					"url",
-					"tredId",
-					"id"
+					"id",
+					"url"
 				],
-				"type": "object"
-			},
-			"Reports": {
-				"$ref": "#/components/schemas/%24Result.DefaultSelection_Prisma.%24ReportsPayload_",
-				"description": "Model Reports"
+				"type": "object",
+				"additionalProperties": false
 			},
 			"ThreadsGet": {
 				"properties": {

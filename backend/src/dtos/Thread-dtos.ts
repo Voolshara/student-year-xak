@@ -1,4 +1,3 @@
-import { Reports } from "@prisma/client";
 import { user } from "./user-dtos";
 
 // Request
@@ -49,7 +48,5 @@ export interface Thread {
   tag: string[];
   childThreads: Thread[];
   parent_id: number | undefined;
-  reports: Reports[];
+  reports: Report[];
 }
-
-export interface getThreads {}
