@@ -76,7 +76,7 @@ export default function ThredElement({ thredData, nowLevel, isLast }: Props) {
         viewBox="0 0 24 24"
         strokeWidth={1.5}
         stroke="currentColor"
-        className="w-6 h-8 cursor-pointer"
+        className="z-10 w-6 h-8 cursor-pointer"
       >
         <path
           strokeLinecap="round"
