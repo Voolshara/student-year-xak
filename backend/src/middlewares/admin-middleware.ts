@@ -31,7 +31,7 @@ export default function (
 
     req.user = userData;
 
-    if (req.user.role !== "admin") {
+    if (!req.user.isAdmin) {
       return next(ApiError.NotAdminError());
     }
 
