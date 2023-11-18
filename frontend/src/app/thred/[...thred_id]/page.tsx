@@ -41,6 +41,17 @@ function ThredEdit({ params }: Props) {
 
   async function fetchData() {
     const users = await ThreadService.getUsers();
+
+    if (params.thred_id[0] !== "-1") {
+      const threadData = await ThreadService.getOneThread(
+        parseInt(params.thred_id[0])
+      );
+      setTags(threadData.tag);
+      setTitle(threadData.title);
+      if (threadData.comment !== undefined) setComment(threadData.comment);
+      setSolver(threadData.solver?.id);
+      // setNowStatus(threadData.now_status);
+    }
     setUsers(users);
   }
 

@@ -1,7 +1,12 @@
 import { getDevicesResponse } from "@/models/response/DeviceResponse";
 import $api from "../http";
 import { Project, SuccesReq } from "@/models/response/GlobalRespnose";
-import { Thread, ThreadsPut } from "@/models/global";
+import {
+  Thread,
+  ThreadLoadEdit,
+  ThreadsPut,
+  userThread,
+} from "@/models/global";
 import { IUser } from "@/models/IUser";
 
 export default class ThreadService {
@@ -26,6 +31,15 @@ export default class ThreadService {
 
   static async putThreads(body: ThreadsPut): Promise<SuccesReq> {
     const fetchData = $api.put<SuccesReq>("/thread", body);
+    return (await fetchData).data;
+  }
+
+  static async getOneThread(thread_id: number): Promise<ThreadLoadEdit> {
+    const fetchData = $api.get<ThreadLoadEdit>("/one_thread", {
+      params: {
+        id: thread_id,
+      },
+    });
     return (await fetchData).data;
   }
 

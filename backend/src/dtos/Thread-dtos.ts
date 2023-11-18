@@ -6,6 +6,10 @@ export interface ThreadsGet {
   proj_id: number;
 }
 
+export interface OneThreads {
+  id: number;
+}
+
 export interface ThreadsCreate {
   title: string;
   comment: string;

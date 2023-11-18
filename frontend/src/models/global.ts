@@ -27,6 +27,29 @@ export interface Thread {
   reports: Report[];
 }
 
+export interface userThread {
+  id: number;
+  link: string;
+  isAdmin: boolean;
+}
+
+export interface ThreadLoadEdit {
+  id: number;
+  creation_date: Date;
+  solver: userThread | null;
+  creator: userThread;
+  title: string;
+  comment: string | undefined;
+  state_done: number;
+  state_error: number;
+  state_none: number;
+  state_skip: number;
+  tag: string[];
+  childThreads: Thread[];
+  parent_id: number | undefined;
+  reports: Report[];
+}
+
 export interface ThreadsCreate {
   title: string;
   comment: string;

@@ -195,65 +195,6 @@
 				"type": "object",
 				"additionalProperties": false
 			},
-			"Project": {
-				"properties": {
-					"id": {
-						"type": "number",
-						"format": "double"
-					},
-					"title": {
-						"type": "string"
-					}
-				},
-				"required": [
-					"id",
-					"title"
-				],
-				"type": "object",
-				"additionalProperties": false
-			},
-			"ThreadsPut": {
-				"properties": {
-					"title": {
-						"type": "string"
-					},
-					"comment": {
-						"type": "string"
-					},
-					"nowStatus": {
-						"type": "number",
-						"format": "double"
-					},
-					"solver_id": {
-						"type": "number",
-						"format": "double"
-					},
-					"tag": {
-						"items": {
-							"type": "string"
-						},
-						"type": "array"
-					},
-					"parent_id": {
-						"type": "number",
-						"format": "double",
-						"nullable": true
-					},
-					"id": {
-						"type": "number",
-						"format": "double"
-					}
-				},
-				"required": [
-					"title",
-					"comment",
-					"nowStatus",
-					"tag",
-					"parent_id"
-				],
-				"type": "object",
-				"additionalProperties": false
-			},
 			"user": {
 				"properties": {
 					"id": {
@@ -371,6 +312,78 @@
 				"required": [
 					"id",
 					"url"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"OneThreads": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"required": [
+					"id"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"Project": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"title": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"id",
+					"title"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ThreadsPut": {
+				"properties": {
+					"title": {
+						"type": "string"
+					},
+					"comment": {
+						"type": "string"
+					},
+					"nowStatus": {
+						"type": "number",
+						"format": "double"
+					},
+					"solver_id": {
+						"type": "number",
+						"format": "double"
+					},
+					"tag": {
+						"items": {
+							"type": "string"
+						},
+						"type": "array"
+					},
+					"parent_id": {
+						"type": "number",
+						"format": "double",
+						"nullable": true
+					},
+					"id": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"required": [
+					"title",
+					"comment",
+					"nowStatus",
+					"tag",
+					"parent_id"
 				],
 				"type": "object",
 				"additionalProperties": false
@@ -685,7 +698,7 @@
 						}
 					}
 				},
-				"description": "Получение Проектов<br />",
+				"description": "Получение пользователей<br />",
 				"tags": [
 					"Threads"
 				],
@@ -695,6 +708,53 @@
 					}
 				],
 				"parameters": []
+			}
+		},
+		"/api/one_thread": {
+			"get": {
+				"operationId": "GetThread",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/Thread"
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "AuthErrors",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/AuthError"
+								}
+							}
+						}
+					}
+				},
+				"description": "Получение Проектов<br />",
+				"tags": [
+					"Threads"
+				],
+				"security": [
+					{
+						"jwt": []
+					}
+				],
+				"parameters": [
+					{
+						"in": "query",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
 			}
 		},
 		"/api/projects": {

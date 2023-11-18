@@ -59,6 +59,32 @@ threadsRoutes.put(
 );
 
 threadsRoutes.get(
+  "/one_thread",
+  authMiddleware,
+  async (req: AuthorizedRequest, res: Response, next: NextFunction) => {
+    try {
+      const user = req.user;
+      const { id } = req.query;
+
+      if (id === undefined || id === null) {
+        throw ApiError.BadRequestError("Request must contain id", {
+          type: "Bad params",
+        });
+      }
+
+      const controller = new ThreadController();
+      const response = await controller.getThread(
+        { id: parseInt(id as string) },
+        user
+      );
+      return res.send(response);
+    } catch (e) {
+      next(e);
+    }
+  }
+);
+
+threadsRoutes.get(
   "/thread",
   authMiddleware,
   async (req: AuthorizedRequest, res: Response, next: NextFunction) => {

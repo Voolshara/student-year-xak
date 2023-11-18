@@ -14,6 +14,37 @@ import ApiError from "../exceptions/api-error";
 const prisma = new PrismaClient();
 
 class ThreadsService {
+  async getThreadData(thread_id: number): Promise<Thread> {
+    const thread = await prisma.thread.findFirstOrThrow({
+      where: {
+        id: thread_id,
+      },
+      include: {
+        creator: true,
+        parent: true,
+        solver: true,
+        reports: true,
+      },
+    });
+
+    return {
+      id: thread.id,
+      creation_date: thread.creation_date,
+      comment: thread.comment,
+      creator: thread.creator,
+      solver: thread.solver,
+      parent_id: thread.parent?.id,
+      reports: thread.reports,
+      state_done: thread.state_done,
+      state_error: thread.state_error,
+      state_none: thread.state_none,
+      state_skip: thread.state_skip,
+      tag: thread.tag,
+      title: thread.title,
+      childThreads: [],
+    };
+  }
+
   async getUsers(user: userDto): Promise<userDto[]> {
     const users = await prisma.users.findMany();
 
