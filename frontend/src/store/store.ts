@@ -15,7 +15,7 @@ export default class Store {
   }
 
   getUserName() {
-    return this.user.login;
+    return this.user.link;
   }
 
   setAuth(bool: boolean) {

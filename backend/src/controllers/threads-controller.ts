@@ -14,6 +14,7 @@ import {
 import { userDto } from "../dtos/user-dtos";
 import { SuccesReq } from "../dtos/global-dtos";
 import {
+  OneThreads,
   Project,
   Thread,
   ThreadsEdit,
@@ -31,6 +32,34 @@ interface AuthError {
 
 @Route("/api")
 class ThreadController {
+  /**
+   * Получение пользователей<br />
+   */
+  @Response<AuthError>(400, "AuthErrors")
+  @Security("jwt")
+  @Tags("Threads")
+  @Get("/users")
+  public async getUsers(
+    @Hidden() @Query() user: userDto = {} as userDto
+  ): Promise<userDto[]> {
+    const response = await threadsService.getUsers(user);
+    return response;
+  }
+
+  /**
+   * Получение Проектов<br />
+   */
+  @Response<AuthError>(400, "AuthErrors")
+  @Security("jwt")
+  @Tags("Threads")
+  @Get("/one_thread")
+  public async getThread(
+    @Queries() query: OneThreads,
+    @Hidden() @Query() user: userDto = {} as userDto
+  ): Promise<Thread> {
+    const response = await threadsService.getThreadData(query.id);
+    return response;
+  }
   /**
    * Получение Проектов<br />
    */

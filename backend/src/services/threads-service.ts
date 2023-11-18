@@ -3,7 +3,6 @@ import { PrismaClient } from "@prisma/client";
 import { userDto } from "../dtos/user-dtos";
 import { SuccesReq } from "../dtos/global-dtos";
 import {
-  getThreads,
   Project,
   Thread,
   ThreadsCreate,
@@ -15,6 +14,49 @@ import ApiError from "../exceptions/api-error";
 const prisma = new PrismaClient();
 
 class ThreadsService {
+  async getThreadData(thread_id: number): Promise<Thread> {
+    const thread = await prisma.thread.findFirstOrThrow({
+      where: {
+        id: thread_id,
+      },
+      include: {
+        creator: true,
+        parent: true,
+        solver: true,
+        reports: true,
+      },
+    });
+
+    return {
+      id: thread.id,
+      creation_date: thread.creation_date,
+      comment: thread.comment,
+      creator: thread.creator,
+      solver: thread.solver,
+      parent_id: thread.parent?.id,
+      reports: thread.reports,
+      state_done: thread.state_done,
+      state_error: thread.state_error,
+      state_none: thread.state_none,
+      state_skip: thread.state_skip,
+      tag: thread.tag,
+      title: thread.title,
+      childThreads: [],
+    };
+  }
+
+  async getUsers(user: userDto): Promise<userDto[]> {
+    const users = await prisma.users.findMany();
+
+    return users.map((u) => {
+      return {
+        userId: u.id,
+        link: u.link,
+        isAdmin: u.isAdmin,
+      };
+    });
+  }
+
   async getProjects(user: userDto): Promise<Project[]> {
     let projects;
     if (user.isAdmin) {
@@ -43,6 +85,9 @@ class ThreadsService {
             },
           ],
         },
+        orderBy: {
+          id: "asc",
+        },
       });
     }
     return projects.map((proj) => {
@@ -54,29 +99,11 @@ class ThreadsService {
   }
 
   async editThread(thread: ThreadsEdit, user: userDto): Promise<SuccesReq> {
-    await prisma.thread.update({
-      where: {
-        id: thread.id,
-      },
-      data: {
-        title: thread.title,
-        comment: thread.comment,
-        creator: {
-          connect: {
-            id: user.userId,
-          },
+    if (thread.solver_id === undefined) {
+      await prisma.thread.update({
+        where: {
+          id: thread.id,
         },
-        tag: thread.tag,
-      },
-    });
-    return {
-      message: "success",
-    };
-  }
-
-  async addThread(thread: ThreadsCreate, user: userDto): Promise<SuccesReq> {
-    if (thread.parent_id === null) {
-      await prisma.thread.create({
         data: {
           title: thread.title,
           comment: thread.comment,
@@ -91,23 +118,111 @@ class ThreadsService {
     } else {
       await prisma.thread.update({
         where: {
-          id: thread.parent_id,
+          id: thread.id,
         },
         data: {
-          childThreads: {
-            create: {
-              title: thread.title,
-              comment: thread.comment,
-              creator: {
-                connect: {
-                  id: user.userId,
-                },
-              },
-              tag: thread.tag,
+          title: thread.title,
+          comment: thread.comment,
+          creator: {
+            connect: {
+              id: user.userId,
             },
           },
+          solver: {
+            connect: {
+              id: thread.solver_id,
+            },
+          },
+          tag: thread.tag,
         },
       });
+    }
+    return {
+      message: "success",
+    };
+  }
+
+  async addThread(thread: ThreadsCreate, user: userDto): Promise<SuccesReq> {
+    if (thread.parent_id === null) {
+      if (thread.solver_id === undefined) {
+        await prisma.thread.create({
+          data: {
+            title: thread.title,
+            comment: thread.comment,
+            creator: {
+              connect: {
+                id: user.userId,
+              },
+            },
+            tag: thread.tag,
+          },
+        });
+      } else {
+        await prisma.thread.create({
+          data: {
+            title: thread.title,
+            comment: thread.comment,
+            creator: {
+              connect: {
+                id: user.userId,
+              },
+            },
+            solver: {
+              connect: {
+                id: thread.solver_id,
+              },
+            },
+            tag: thread.tag,
+          },
+        });
+      }
+    } else {
+      if (thread.solver_id === undefined) {
+        await prisma.thread.update({
+          where: {
+            id: thread.parent_id,
+          },
+          data: {
+            childThreads: {
+              create: {
+                title: thread.title,
+                comment: thread.comment,
+                creator: {
+                  connect: {
+                    id: user.userId,
+                  },
+                },
+                tag: thread.tag,
+              },
+            },
+          },
+        });
+      } else {
+        await prisma.thread.update({
+          where: {
+            id: thread.parent_id,
+          },
+          data: {
+            childThreads: {
+              create: {
+                title: thread.title,
+                comment: thread.comment,
+                creator: {
+                  connect: {
+                    id: user.userId,
+                  },
+                },
+                tag: thread.tag,
+              },
+            },
+            solver: {
+              connect: {
+                id: thread.solver_id,
+              },
+            },
+          },
+        });
+      }
     }
 
     return {
@@ -192,7 +307,25 @@ class ThreadsService {
           solver: true,
           reports: true,
           creator: true,
-          childThreads: true,
+          childThreads: {
+            where: {
+              OR: [
+                {
+                  creator: {
+                    id: user.userId,
+                  },
+                },
+                {
+                  solver: {
+                    id: user.userId,
+                  },
+                },
+                {
+                  solver: null,
+                },
+              ],
+            },
+          },
           parent: true,
         },
       });
@@ -221,8 +354,29 @@ class ThreadsService {
           solver: true,
           reports: true,
           creator: true,
-          childThreads: true,
+          childThreads: {
+            where: {
+              OR: [
+                {
+                  creator: {
+                    id: user.userId,
+                  },
+                },
+                {
+                  solver: {
+                    id: user.userId,
+                  },
+                },
+                {
+                  solver: null,
+                },
+              ],
+            },
+          },
           parent: true,
+        },
+        orderBy: {
+          id: "asc",
         },
       });
     }
