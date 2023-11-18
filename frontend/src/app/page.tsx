@@ -22,8 +22,10 @@ function Home() {
   useEffect(() => {
     if (localStorage.getItem("token")) {
       store.checkAuth();
+      fetchProjects();
+    } else {
+      store.setLoading(false);
     }
-    fetchProjects();
   }, []);
 
   return (
@@ -33,11 +35,11 @@ function Home() {
 
         {store.isLoading ? (
           <p className="text-5xl mt-44">Пожалуйста подождите...</p>
-        ) : (
+        ) : store.isAuth ? (
           <div className="w-5/6 h-full flex flex-col items-start justify-center gap-y-20 mt-10">
-            <p className="text-3xl">
+            {/* <p className="text-3xl">
               Привет, <strong>{store.getUserName()}</strong>
-            </p>
+            </p> */}
 
             <div className="w-full h-full flex flex-row items-start justify-between gap-x-10">
               <div className="flex flex-col items-start justify-center w-1/4 ">
@@ -73,6 +75,8 @@ function Home() {
               </div>
             </div>
           </div>
+        ) : (
+          <p className="text-5xl mt-44">Вы не авторизованы</p>
         )}
       </StoreProvider>
     </main>

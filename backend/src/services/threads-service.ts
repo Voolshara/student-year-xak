@@ -42,6 +42,9 @@ class ThreadsService {
             },
           ],
         },
+        orderBy: {
+          id: "asc",
+        },
       });
     }
     return projects.map((proj) => {
@@ -222,6 +225,9 @@ class ThreadsService {
           creator: true,
           childThreads: true,
           parent: true,
+        },
+        orderBy: {
+          id: "asc",
         },
       });
     }

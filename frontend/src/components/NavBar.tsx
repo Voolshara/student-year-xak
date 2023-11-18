@@ -14,13 +14,13 @@ function NavBar() {
         </Link>
         <div className="flex flex-row gap-x-10 items-center">
           <Link href="/login" className=" text-black font-bold text-xl">
-            Sign In
+            Вход
           </Link>
           <Link
             href="/registration"
             className="p-2 border-2 border-black bg-black text-white hover:bg-white hover:text-black rounded-2xl font-bold text-xl"
           >
-            Sign Up
+            Регистрация
           </Link>
         </div>
       </div>
@@ -33,7 +33,7 @@ function NavBar() {
       </Link>
       <div className="flex flex-row gap-x-10 items-center">
         <p className=" text-black font-bold text-xl">
-          Welcome, {store.getUserName()}
+          Привет, {store.getUserName()}
         </p>
         <p
           className="p-2 border-2 border-black bg-black text-white hover:bg-white hover:text-black rounded-2xl font-bold text-xl"
@@ -41,7 +41,7 @@ function NavBar() {
             await store.logout();
           }}
         >
-          Log Out
+          Выйти
         </p>
       </div>
     </div>
