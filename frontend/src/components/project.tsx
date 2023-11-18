@@ -17,6 +17,7 @@ export default function ProjectELement({ project }: Props) {
 
   async function fetchThreads() {
     const thread = await ThreadService.getThreads(project.id);
+    // console.log(thread);
     setTread(thread);
   }
 

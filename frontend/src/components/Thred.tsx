@@ -32,7 +32,7 @@ export default function ThredElement({ thredData, nowLevel, isLast }: Props) {
           <p
             className="text-md font-bold ml-1 cursor-pointer"
             onClick={() => {
-              push(`/thred/${thredData.id}`);
+              push(`/thred/${thredData.id}/${thredData.parent_id}`);
             }}
           >
             {thredData.title}

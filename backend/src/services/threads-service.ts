@@ -276,7 +276,25 @@ class ThreadsService {
           solver: true,
           reports: true,
           creator: true,
-          childThreads: true,
+          childThreads: {
+            where: {
+              OR: [
+                {
+                  creator: {
+                    id: user.userId,
+                  },
+                },
+                {
+                  solver: {
+                    id: user.userId,
+                  },
+                },
+                {
+                  solver: null,
+                },
+              ],
+            },
+          },
           parent: true,
         },
       });
@@ -305,7 +323,25 @@ class ThreadsService {
           solver: true,
           reports: true,
           creator: true,
-          childThreads: true,
+          childThreads: {
+            where: {
+              OR: [
+                {
+                  creator: {
+                    id: user.userId,
+                  },
+                },
+                {
+                  solver: {
+                    id: user.userId,
+                  },
+                },
+                {
+                  solver: null,
+                },
+              ],
+            },
+          },
           parent: true,
         },
         orderBy: {

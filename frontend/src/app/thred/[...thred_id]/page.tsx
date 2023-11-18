@@ -55,7 +55,17 @@ function ThredEdit({ params }: Props) {
         id: undefined,
         nowStatus: nowStatus,
         comment: comment,
-        parent_id: thread_id === "-1" ? null : parseInt(thread_id),
+        parent_id: thread_id === "undefined" ? null : parseInt(thread_id),
+        solver_id: solver,
+        tag: tags,
+        title: title,
+      });
+    } else {
+      ThreadService.putThreads({
+        id: parseInt(params.thred_id[0]),
+        nowStatus: nowStatus,
+        comment: comment,
+        parent_id: thread_id === "undefined" ? null : parseInt(thread_id),
         solver_id: solver,
         tag: tags,
         title: title,
