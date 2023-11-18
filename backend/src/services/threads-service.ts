@@ -14,6 +14,18 @@ import ApiError from "../exceptions/api-error";
 const prisma = new PrismaClient();
 
 class ThreadsService {
+  async getUsers(user: userDto): Promise<userDto[]> {
+    const users = await prisma.users.findMany();
+
+    return users.map((u) => {
+      return {
+        userId: u.id,
+        link: u.link,
+        isAdmin: u.isAdmin,
+      };
+    });
+  }
+
   async getProjects(user: userDto): Promise<Project[]> {
     let projects;
     if (user.isAdmin) {

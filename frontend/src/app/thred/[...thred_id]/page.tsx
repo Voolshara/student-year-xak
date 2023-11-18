@@ -7,10 +7,11 @@ import ThredStatus from "@/components/status";
 import StoreProvider, { Context } from "@/components/storeProvide";
 import { observer } from "mobx-react-lite";
 import { useEffect, useContext } from "react";
+import ThreadService from "@/services/ThredsService";
 
 interface Props {
   params: {
-    thred_id: number;
+    thred_id: number[];
   };
 }
 
@@ -27,9 +28,30 @@ function ThredEdit({ params }: Props) {
 
   const [isSaved, setIsSaved] = useState<boolean>(true);
   const [title, setTitle] = useState<string>("");
+  const [comment, setComment] = useState<string>("");
   const [solver, setSolver] = useState<string>("");
   const [tagName, setTagName] = useState<string>("");
   const [nowStatus, setNowStatus] = useState<number>(-1);
+
+  const [isNew, setIsNew] = useState<boolean>(false);
+  const [thread_id, setThread_id] = useState<number>(-1);
+
+  useEffect(() => {
+    if (params.thred_id[0] === -1) setIsNew(true);
+    setThread_id(params.thred_id[1]);
+  }, []);
+
+  function save() {
+    if (isNew) {
+      ThreadService.putThreads({
+        id: undefined,
+        comment: comment,
+        parent_id: thread_id === -1 ? null : thread_id,
+        tag: tags,
+        title: title,
+      });
+    }
+  }
 
   return (
     <main className="flex w-full min-h-screen flex-col items-center justify-start mb-20">
@@ -37,9 +59,15 @@ function ThredEdit({ params }: Props) {
         <NavBar />
 
         <div className="w-11/12 bg-white z-30 p-10 pt-20 rounded-xl flex flex-col gap-y-5 items-start justify-center">
-          <p className="font-bold text-3xl mb-12">
-            Изменение Задачи: {params.thred_id}
-          </p>
+          {isNew ? (
+            <p className="font-bold text-3xl mb-12">
+              Создание задачи: {thread_id}
+            </p>
+          ) : (
+            <p className="font-bold text-3xl mb-12">
+              Изменение Задачи: {thread_id}
+            </p>
+          )}
 
           <div className="ml-10 flex flex-col gap-y-10">
             <div className="flex flex-col gap-y-3">
@@ -56,6 +84,19 @@ function ThredEdit({ params }: Props) {
                 value={title}
                 onChange={(e) => {
                   setTitle(e.target.value);
+                  setIsSaved(false);
+                }}
+              />
+            </div>
+
+            <div className="flex flex-col gap-y-3">
+              <p className="text-xl">Комментарий:</p>
+              <input
+                type="text"
+                className="border-b-2 border-black focus:outline-none"
+                value={comment}
+                onChange={(e) => {
+                  setComment(e.target.value);
                   setIsSaved(false);
                 }}
               />
@@ -183,6 +224,7 @@ function ThredEdit({ params }: Props) {
               <button
                 onClick={() => {
                   setIsSaved(true);
+                  save();
                 }}
                 className="border-black border-2 rounded-xl px-3 py-2 hover:bg-black hover:text-white"
               >

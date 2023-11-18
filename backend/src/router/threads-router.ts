@@ -11,6 +11,21 @@ import { ThreadsPut } from "../dtos/Thread-dtos";
 export const threadsRoutes = Router();
 
 threadsRoutes.get(
+  "/users",
+  authMiddleware,
+  async (req: AuthorizedRequest, res: Response, next: NextFunction) => {
+    try {
+      const user = req.user;
+      const controller = new ThreadController();
+      const response = await controller.getUsers(user);
+      return res.send(response);
+    } catch (e) {
+      next(e);
+    }
+  }
+);
+
+threadsRoutes.get(
   "/projects",
   authMiddleware,
   async (req: AuthorizedRequest, res: Response, next: NextFunction) => {

@@ -37,6 +37,19 @@ class ThreadController {
   @Response<AuthError>(400, "AuthErrors")
   @Security("jwt")
   @Tags("Threads")
+  @Get("/users")
+  public async getUsers(
+    @Hidden() @Query() user: userDto = {} as userDto
+  ): Promise<userDto[]> {
+    const response = await threadsService.getUsers(user);
+    return response;
+  }
+  /**
+   * Получение Проектов<br />
+   */
+  @Response<AuthError>(400, "AuthErrors")
+  @Security("jwt")
+  @Tags("Threads")
   @Get("/projects")
   public async getProjects(
     @Hidden() @Query() user: userDto = {} as userDto

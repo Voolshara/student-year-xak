@@ -26,3 +26,14 @@ export interface Thread {
   parent_id: number | undefined;
   reports: Report[];
 }
+
+export interface ThreadsCreate {
+  title: string;
+  comment: string;
+  tag: string[];
+  parent_id: number | null;
+}
+
+export interface ThreadsPut extends ThreadsCreate {
+  id: number | undefined;
+}

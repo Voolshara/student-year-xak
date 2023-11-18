@@ -1,7 +1,7 @@
 import { getDevicesResponse } from "@/models/response/DeviceResponse";
 import $api from "../http";
 import { Project, SuccesReq } from "@/models/response/GlobalRespnose";
-import { Thread } from "@/models/global";
+import { Thread, ThreadsPut } from "@/models/global";
 
 export default class ThreadService {
   static async getProjects(): Promise<Project[]> {
@@ -14,6 +14,13 @@ export default class ThreadService {
       params: {
         proj_id: proj_id,
       },
+    });
+    return (await fetchData).data;
+  }
+
+  static async putThreads(body: ThreadsPut): Promise<SuccesReq> {
+    const fetchData = $api.put<SuccesReq>("/thread", {
+      params: body,
     });
     return (await fetchData).data;
   }

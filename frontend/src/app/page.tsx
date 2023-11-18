@@ -7,11 +7,14 @@ import StoreProvider, { Context } from "@/components/storeProvide";
 import { observer } from "mobx-react-lite";
 import { Project } from "@/models/response/GlobalRespnose";
 import ThreadService from "@/services/ThredsService";
+import { useRouter } from "next/navigation";
 
 function Home() {
   const { store } = useContext(Context);
   const [projects, setProjects] = useState<Project[]>([]);
   const [nowProject, setNowProject] = useState<Project>();
+
+  const { push } = useRouter();
 
   async function fetchProjects() {
     const proj = await ThreadService.getProjects();
@@ -44,7 +47,26 @@ function Home() {
             <div className="w-full h-full flex flex-row items-start justify-between gap-x-10">
               <div className="flex flex-col items-start justify-center w-1/4 ">
                 <div className="flex flex-row items-center gap-x-3">
-                  <p className="text-2xl font-bold">Проекты</p>
+                  <div className="flex flex-row items-center gap-x-5">
+                    <p className="text-2xl font-bold">Проекты</p>
+                    <svg
+                      onClick={() => {
+                        push("/thred/-1/-1");
+                      }}
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth={1.5}
+                      stroke="currentColor"
+                      className="w-6 h-8 cursor-pointer"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"
+                      />
+                    </svg>
+                  </div>
                 </div>
                 <div className="flex flex-col items-start justify-center ml-7 mt-3 gap-y-4 w-full">
                   {projects.map((pj, index) => (
