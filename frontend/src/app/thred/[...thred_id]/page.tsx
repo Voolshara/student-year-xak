@@ -56,7 +56,9 @@ function ThredEdit({ params }: Props) {
   }
 
   useEffect(() => {
-    if (params.thred_id[0] === "-1") setIsNew(true);
+    if (params.thred_id[0] === "-1") {
+      setIsNew(true);
+    }
     fetchData();
   }, []);
 
@@ -66,7 +68,10 @@ function ThredEdit({ params }: Props) {
         id: undefined,
         nowStatus: nowStatus,
         comment: comment,
-        parent_id: thread_id === "undefined" ? null : parseInt(thread_id),
+        parent_id:
+          thread_id === "undefined" || thread_id === "-1"
+            ? null
+            : parseInt(thread_id),
         solver_id: solver,
         tag: tags,
         title: title,
